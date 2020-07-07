@@ -29,7 +29,6 @@ class ArticleView(APIView):
 
 
     def delete(self, request, pk):
-        # Get object with this pk
         article = get_object_or_404(Article.objects.all(), pk=pk)
         article.delete()
         return Response({"message": "Article with id `{}` has been deleted.".format(pk)},status=204)
