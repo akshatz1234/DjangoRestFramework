@@ -22,6 +22,7 @@ class ArticleDetail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gen
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+        
 class SingleArticleView(generics.RetrieveUpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
