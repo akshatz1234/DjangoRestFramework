@@ -7,5 +7,5 @@ app_name = "articles"
 urlpatterns = [
     path('articles/', ArticleDetail.as_view()),
     path('articles/update/<int:pk>', SingleArticleView.as_view()),
-    # path('articles/delete/<int:pk>', DeleteArticleView.as_view()),
+    path('articles/delete/<int:pk>', ArticleDetail.as_view()),
 ]

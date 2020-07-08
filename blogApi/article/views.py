@@ -8,7 +8,7 @@ from .models import Article, Author
 from .serializers import ArticleSerializer
 from django.shortcuts import get_object_or_404
 
-class ArticleDetail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+class ArticleDetail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView, mixins.DestroyModelMixin):
 
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
@@ -22,7 +22,11 @@ class ArticleDetail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gen
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-        
+
+    def delete(self, request, *args, **kwargs):
+        # print(delete(self, request, *args, **kwargs))
+        return self.destroy(request, *args, **kwargs)
+
 class SingleArticleView(generics.RetrieveUpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
