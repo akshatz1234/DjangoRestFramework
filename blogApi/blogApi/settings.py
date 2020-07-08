@@ -25,7 +25,7 @@ SECRET_KEY = 'trc(q()=wf+3+4xzkd2j#v5+qidzcff2=qmf8^%71f@21)a*v!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

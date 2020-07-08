@@ -24,7 +24,6 @@ class ArticleDetail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gen
         return self.create(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        # print(delete(self, request, *args, **kwargs))
         return self.destroy(request, *args, **kwargs)
 
 class SingleArticleView(generics.RetrieveUpdateAPIView):
