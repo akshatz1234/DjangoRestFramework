@@ -17,6 +17,6 @@ class Article(models.Model):
         return self.title
 
 class Image(models.Model):
-    file = models.ImageField(blank=False, null=False)
+    image = models.ImageField(blank=False, null=False)
     def __str__(self):
         return self.file.name

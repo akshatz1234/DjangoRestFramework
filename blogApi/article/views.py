@@ -1,7 +1,8 @@
-from rest_framework import generics
+import CardIdentification as CI
+# importlib.import_module("blogApi/CardIdentification")
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import mixins, status, viewsets
+from rest_framework import mixins, status, viewsets, generics
 from rest_framework.parsers import FileUploadParser
 
 from .models import Article, Author
@@ -44,7 +45,8 @@ class ImageView(mixins.ListModelMixin, generics.GenericAPIView):
 
       if image_serializer.is_valid():
         #   print(file_serializer)
-          image_serializer.save()
-          return Response(image_serializer.data, status=status.HTTP_201_CREATED)
+        image_serializer.save()
+        CI.rear(image_serializer)          
+        return Response(image_serializer.data, status=status.HTTP_201_CREATED)
       else:
           return Response(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
