@@ -15,3 +15,8 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+class Image(models.Model):
+    image = models.ImageField(blank=False, null=False)
+    def __str__(self):
+        return self.file.name
