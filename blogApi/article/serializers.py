@@ -7,7 +7,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = ('author_id','title', 'description', 'body', 'id')
 
-class FileSerializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = File
-        fields = "__all__"
+        model = Image
+        fields = '__all__'

@@ -30,16 +30,21 @@ class SingleArticleView(generics.RetrieveUpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
-class FileUploadView(generics.GenericAPIView):
-    serializer_class = FileSerializer
+class ImageView(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = Image.objects.all() 
+    serializer_class = ImageSerializer
     parser_class = (FileUploadParser,)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, *kwargs)
 
     def post(self, request, *args, **kwargs):
 
-      file_serializer = FileSerializer(data=request.data)
+      image_serializer = ImageSerializer(data=request.data)
 
-      if file_serializer.is_valid():
-          file_serializer.save()
-          return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+      if image_serializer.is_valid():
+        #   print(file_serializer)
+          image_serializer.save()
+          return Response(image_serializer.data, status=status.HTTP_201_CREATED)
       else:
-          return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+          return Response(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
