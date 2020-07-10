@@ -29,9 +29,10 @@ def preprocess(path):
     #    out.show()
     i = cv.imread('/home/akshatz/Downloads/IMG_20200702_210159.jpg',0)
     ret, imgf = cv.threshold(i, 0, 255, cv.THRESH_BINARY+cv.THRESH_OTSU)
-    cv.imwrite('/home/akshatz/Downloads/IMG_20200702_210159.jpg',imgf);
+    cv.imwrite('/home/akshatz/Downloads/IMG_20200702_210159.jpg',imgf)
     output = pytesseract.image_to_string(imgf, lang='eng')
-    print(output)
+    with open("ID.txt", "a") as f:
+        f.write(output)
     return(output)
 
 
@@ -48,7 +49,7 @@ def AADHARproc(out):
                     if num is None:
                         return "None"
                     else:
-                        return id.group(1)+" EMP ID"
+                        return num.group(1)+" EMP ID"
                 else:
                     return num.group(1)+" VOTER ID"
             else:
@@ -58,6 +59,9 @@ def AADHARproc(out):
     else:
         return num.group(1)+" AADHAR CARD"
 
-    
 def rear(request):
-	return(AADHARproc(preprocess('/home/akshatz/Downloads/PAN.jpg')))
+    try:
+        file = '/home/akshatz/Downloads/e1.jpg'
+        return(AADHARproc(preprocess(file)))
+    except:
+        return None
