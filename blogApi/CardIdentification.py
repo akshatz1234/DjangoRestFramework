@@ -40,11 +40,21 @@ def AADHARproc(out):
     if num is None:
             num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)
             if num is None:
-                    return("None")
+                    num = re.search("([A-Z]{1}[0-9]{7})", out)
+                    if num is None:
+                        num = re.search("([A-Z]{3}[0-9]{7})", out)
+                        if num is None:
+                            return "None"
+                        else:
+                            return num.group(1)+" VOTER ID"
+                    else:
+                        return num.group(1)+" PASSPORT"
+			
             else:
                     return num.group(1)+" PAN CARD"
     else:
         return num.group(1)+" AADHAR CARD"
+
     
 def rear(request):
 	return(AADHARproc(preprocess('/home/akshatz/Downloads/IMG_20200702_210159.jpg')))
