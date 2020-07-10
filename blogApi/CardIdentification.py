@@ -38,13 +38,26 @@ def preprocess(path):
 def AADHARproc(out):
     num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)
     if num is None:
-            num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)
+        num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)
+        if num is None:
+            num = re.search("([A-Z]{1}[0-9]{7})", out)
             if num is None:
-                    return("None")
+                num = re.search("([A-Z]{3}[0-9]{7})", out)
+                if num is None:
+                    num = re.search("([A-Z]{3}[0-9]{6})")
+                    if id is not None:
+                        return id.group(1)+" EMP ID"
+                    else:
+                        return "None"
+                else:
+                    return num.group(1)+" VOTER ID"
             else:
-                    return num.group(1)+" PAN CARD"
+                return num.group(1)+" PASSPORT"
+        else:    
+            return num.group(1)+" PAN CARD"
     else:
         return num.group(1)+" AADHAR CARD"
+
     
 def rear(request):
-	return(AADHARproc(preprocess('/home/akshatz/Downloads/IMG_20200702_210159.jpg')))
+	return(AADHARproc(preprocess('/home/akshatz/Downloads/PAN.jpg')))
