@@ -45,10 +45,10 @@ def AADHARproc(out):
                 num = re.search("([A-Z]{3}[0-9]{7})", out)
                 if num is None:
                     num = re.search("([A-Z]{3}[0-9]{6})")
-                    if id is not None:
-                        return id.group(1)+" EMP ID"
-                    else:
+                    if num is None:
                         return "None"
+                    else:
+                        return id.group(1)+" EMP ID"
                 else:
                     return num.group(1)+" VOTER ID"
             else:
