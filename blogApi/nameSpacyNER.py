@@ -10,10 +10,4 @@ fileName = "ID.txt"
 introductionFileText = open(fileName).read()
 doc = nlp(introductionFileText)
 for token in doc:
-# if token.pos_== "PROPN":
     print(token)
-    # else:
-    #     pass
-
-# print(type(token))
-
