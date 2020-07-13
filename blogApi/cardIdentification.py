@@ -18,20 +18,22 @@ def preprocess(path):
     cropped = img[y1:y2, x1:x2]
     imS = imutils.resize(cropped, width=950)
     cv.imwrite('/home/akshatz/Downloads/IMG_20200702_210159.jpg',imS);
-    image = Image.open('/home/akshatz/Downloads/IMG_20200702_210159.jpg')
+    image = Image.open('/home/akshatz/Downloads/IMG_20200702_210159.jpg (2)')
     enhancer = ImageEnhance.Brightness(image)
     enhanced_im = enhancer.enhance(2)
     con = ImageEnhance.Contrast(enhanced_im)
     con1 = con.enhance(1.3)
     enhancer_object = ImageEnhance.Sharpness(con1)
     out = enhancer_object.enhance(3)
-    out.save("/home/akshatz/Downloads/IMG_20200702_210159.jpg")
+    out.save("/home/akshatz/Downloads/PAN.jpg")
     #    out.show()
-    i = cv.imread('/home/akshatz/Downloads/IMG_20200702_210159.jpg',0)
+    i = cv.imread('/home/akshatz/Downloads/IMG_20200702_210159.jpg (2)',0)
     ret, imgf = cv.threshold(i, 0, 255, cv.THRESH_BINARY+cv.THRESH_OTSU)
-    cv.imwrite('/home/akshatz/Downloads/IMG_20200702_210159.jpg',imgf);
+    cv.imwrite('/home/akshatz/Downloads/IMG_20200702_210159.jpg',imgf)
     output = pytesseract.image_to_string(imgf, lang='eng')
-    print(output)
+    with open("ID.txt", "a") as f:
+        f.write(output)
+        print(output)
     return(output)
 
 
@@ -45,19 +47,30 @@ def AADHARproc(out):
                 num = re.search("([A-Z]{3}[0-9]{7})", out)
                 if num is None:
                     num = re.search("([A-Z]{3}[0-9]{6})")
-                    if id is not None:
-                        return id.group(1)+" EMP ID"
+                    if num is None:
+                        num = re.search("DL-[0-9}{14}$")
+                        if num is None:
+                            return "None"
+                        else:
+                            return num.group(1)+"  ID"
                     else:
-                        return "None"
+                        return num.group(1)+" Voter ID"
                 else:
-                    return num.group(1)+" VOTER ID"
-            else:
-                return num.group(1)+" PASSPORT"
-        else:    
-            return num.group(1)+" PAN CARD"
-    else:
-        return num.group(1)+" AADHAR CARD"
+                    return num.group(1)+" Passport"
+            else:    
+                return num.group(1)+"Pan Card"
+        else:
+            return num.group(1)+" Aadhaar Card"
+    else:   
+        return num.group(1)+" Driving License"   
 
-    
-def rear(request):
-	return(AADHARproc(preprocess('/home/akshatz/Downloads/PAN.jpg')))
+def rear():
+    # print("Hello")
+    # try:
+    filename = '/home/akshatz/Downloads/PAN.jpg'
+    #     return(AADHARproc(preprocess(file)))
+    # except:
+    #     return None
+    text = str(((pytesseract.image_to_string(Image.open(filename))))) 
+    print(text)
+rear()
