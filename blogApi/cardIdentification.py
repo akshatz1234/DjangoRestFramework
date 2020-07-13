@@ -25,7 +25,7 @@ def preprocess(path):
     con1 = con.enhance(1.3)
     enhancer_object = ImageEnhance.Sharpness(con1)
     out = enhancer_object.enhance(3)
-    out.save("/home/akshatz/Downloads/IMG_20200702_210159.jpg")
+    out.save("/home/akshatz/Downloads/PAN.jpg")
     #    out.show()
     i = cv.imread('/home/akshatz/Downloads/IMG_20200702_210159.jpg (2)',0)
     ret, imgf = cv.threshold(i, 0, 255, cv.THRESH_BINARY+cv.THRESH_OTSU)
@@ -48,22 +48,26 @@ def AADHARproc(out):
                 if num is None:
                     num = re.search("([A-Z]{3}[0-9]{6})")
                     if num is None:
-                        return "None"
+                        num = re.search("DL-[0-9}{14}$")
+                        if num is None:
+                            return "None"
+                        else:
+                            return num.group(1)+" EMP ID"
                     else:
-                        return num.group(1)+" EMP ID"
+                        return num.group(1)+" VOTER ID"
                 else:
-                    return num.group(1)+" VOTER ID"
-            else:
-                return num.group(1)+" PASSPORT"
-        else:    
-            return num.group(1)+" PAN CARD"
-    else:
-        return num.group(1)+" AADHAR CARD"
+                    return num.group(1)+" PASSPORT"
+            else:    
+                return num.group(1)+" PAN CARD"
+        else:
+            return num.group(1)+" AADHAR CARD"
+    else:   
+        return num.group(1)+" Driving License"   
 
 def rear():
     # print("Hello")
     # try:
-    filename = '/home/akshatz/Downloads/IMG_20200702_210159 (2).jpg'
+    filename = '/home/akshatz/Downloads/PAN.jpg'
     #     return(AADHARproc(preprocess(file)))
     # except:
     #     return None
