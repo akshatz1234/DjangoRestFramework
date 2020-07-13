@@ -17,7 +17,7 @@ def preprocess(path):
     y2,x2 = pts.max(axis=0)
     cropped = img[y1:y2, x1:x2]
     imS = imutils.resize(cropped, width=950)
-    cv.imwrite('/home/akshatz/Downloads/IMG_20200702_210159.jpg',imS);
+    cv.imwrite('/home/akshatz/Downloads/e1.jpg',imS);
     image = Image.open('/home/akshatz/Downloads/IMG_20200702_210159.jpg (2)')
     enhancer = ImageEnhance.Brightness(image)
     enhanced_im = enhancer.enhance(2)
@@ -29,7 +29,7 @@ def preprocess(path):
     #    out.show()
     i = cv.imread('/home/akshatz/Downloads/IMG_20200702_210159.jpg (2)',0)
     ret, imgf = cv.threshold(i, 0, 255, cv.THRESH_BINARY+cv.THRESH_OTSU)
-    cv.imwrite('/home/akshatz/Downloads/IMG_20200702_210159.jpg',imgf)
+    cv.imwrite('/home/akshatz/Downloads/e1.jpg',imgf)
     output = pytesseract.image_to_string(imgf, lang='eng')
     with open("ID.txt", "a") as f:
         f.write(output)
@@ -51,23 +51,24 @@ def AADHARproc(out):
                         num = re.search("DL-[0-9}{14}$")
                         if num is None:
                             return "None"
-                        else:
-                            return num.group(1)+"  ID"
+                        else:   
+                            return num.group(1)+" Driving License"   
                     else:
-                        return num.group(1)+" Voter ID"
+                        return num.group(1)+" EMP ID"
                 else:
-                    return num.group(1)+" Passport"
-            else:    
-                return num.group(1)+"Pan Card"
-        else:
-            return num.group(1)+" Aadhaar Card"
-    else:   
-        return num.group(1)+" Driving License"   
+                    return num.group(1)+" Voter ID"
+            else:
+                return num.group(1)+" Passport"
+        else:    
+            return num.group(1)+"Pan Card"
+    else:
+        return num.group(1)+" Aadhaar Card"
+
 
 def rear():
     # print("Hello")
     # try:
-    filename = '/home/akshatz/Downloads/PAN.jpg'
+    filename = '/home/akshatz/Documents/DjangoRestFramework/blogAPI/media/e1.jpg'
     #     return(AADHARproc(preprocess(file)))
     # except:
     #     return None
