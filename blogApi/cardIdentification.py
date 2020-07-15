@@ -1,3 +1,4 @@
+from flask import Flask, app, request
 import pytesseract
 import numpy as np
 from PIL import Image
@@ -67,18 +68,42 @@ def AADHARproc(out):
     else:
         return num.group(1)+" Aadhaar Card"
 
+filename = "/home/akshatz/Downloads/ID proofs/PAN Card/Yash.jpg"
+# def rear():
+    
+#     try:
+#         img = Image.open(filename)
+#         img.load()
+#         text = pytesseract.image_to_string(img)
+#         print(text)
+#         #     f.write(text+"\n")
+#     except:
+#         return None
 
+# rear()
+
+
+ALLOWED_FILES = ['png', 'jpg']
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_FILES
+
+app = Flask(__name__)
+@app.route("/card", methods=['GET', 'POST'])
 def rear():
-    # print("Hello")
-    try:
-        filename = "/home/akshatz/Documents/DjangoRestFramework/blogApi/media/pan.jpg"
+    print(filename)
+    if allowed_file(filename):
+        print(filename)
         img = Image.open(filename)
         img.load()
         text = pytesseract.image_to_string(img)
-        with open("ID.txt", "a") as f:
-            print(text)
-            f.write(text+"\n")
-    except:
+        print(text)
+        return text
+    else:
         return None
 
-rear()
+
+if __name__ == "__main__":
+    app.debug = True
+    app.run(host = '127.0.0.1',port=5000, threaded = False)
