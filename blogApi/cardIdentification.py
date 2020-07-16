@@ -1,3 +1,4 @@
+from flask import Flask, app, request
 import pytesseract
 import numpy as np
 from PIL import Image
@@ -7,7 +8,7 @@ from nltk.tokenize import word_tokenize, RegexpTokenizer
 import re
 import imutils
 
-
+# For image to be preprocessedif required
 def preprocess(path):
     try:
         img = cv.imread(path,0)
@@ -39,7 +40,7 @@ def preprocess(path):
     except:
         return None
 
-
+# Function to detect ID card
 def AADHARproc(out):
     num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)
     if num is None:
@@ -67,18 +68,37 @@ def AADHARproc(out):
     else:
         return num.group(1)+" Aadhaar Card"
 
+#input file name
+filename = "/home/akshatz/Downloads/ID proofs/Aadhar Card/Yash.jpeg"
 
+# Allowed files
+ALLOWED_EXTENSIONS = ['png', 'jpg']
+
+# Function to denote allowed file formats
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# main function
+app = Flask(__name__)
+@app.route("/card", methods=['GET', 'POST'])
 def rear():
-    # print("Hello")
-    try:
-        filename = "/home/akshatz/Documents/DjangoRestFramework/blogApi/media/pan.jpg"
-        img = Image.open(filename)
-        img.load()
-        text = pytesseract.image_to_string(img)
-        with open("ID.txt", "a") as f:
+    with open ("ID.txt", "a") as f:
+        if allowed_file(filename):
+            img = Image.open(filename)
+            img.load()
+            text = pytesseract.image_to_string(img)
             print(text)
             f.write(text+"\n")
-    except:
-        return None
+            if text == None:
+                text = AADHARproc(preprocess(filename))
+                f.write(text+"\n")
+                return text 
+            return "NO text in document"
+        else:
+            return "NOT Valid FILE"
 
-rear()
+
+if __name__ == "__main__":
+    app.debug = True
+    app.run(host = '127.0.0.1',port=5000, threaded = False)
