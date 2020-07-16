@@ -8,7 +8,7 @@ from nltk.tokenize import word_tokenize, RegexpTokenizer
 import re
 import imutils
 
-
+# For image to be preprocessedif required
 def preprocess(path):
     try:
         img = cv.imread(path,0)
@@ -40,7 +40,7 @@ def preprocess(path):
     except:
         return None
 
-
+# Function to detect ID card
 def AADHARproc(out):
     num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)
     if num is None:
@@ -68,40 +68,35 @@ def AADHARproc(out):
     else:
         return num.group(1)+" Aadhaar Card"
 
-filename = "/home/akshatz/Downloads/ID proofs/PAN Card/Yash.jpg"
-# def rear():
-    
-#     try:
-#         img = Image.open(filename)
-#         img.load()
-#         text = pytesseract.image_to_string(img)
-#         print(text)
-#         #     f.write(text+"\n")
-#     except:
-#         return None
+#input file name
+filename = "/home/akshatz/Downloads/ID proofs/Aadhar Card/Yash.jpeg"
 
-# rear()
+# Allowed files
+ALLOWED_EXTENSIONS = ['png', 'jpg']
 
-
-ALLOWED_FILES = ['png', 'jpg']
-
+# Function to denote allowed file formats
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_FILES
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# main function
 app = Flask(__name__)
 @app.route("/card", methods=['GET', 'POST'])
 def rear():
-    print(filename)
-    if allowed_file(filename):
-        print(filename)
-        img = Image.open(filename)
-        img.load()
-        text = pytesseract.image_to_string(img)
-        print(text)
-        return text
-    else:
-        return None
+    with open ("ID.txt", "a") as f:
+        if allowed_file(filename):
+            img = Image.open(filename)
+            img.load()
+            text = pytesseract.image_to_string(img)
+            print(text)
+            f.write(text+"\n")
+            if text == None:
+                text = AADHARproc(preprocess(filename))
+                f.write(text+"\n")
+                return text 
+            return "NO text in document"
+        else:
+            return "NOT Valid FILE"
 
 
 if __name__ == "__main__":
