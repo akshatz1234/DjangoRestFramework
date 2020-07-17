@@ -5,7 +5,7 @@ Created on Mon Jul 13 16:43:22 2020
 
 @author: vishwa
 """
-
+import json
 from nltk.tag.stanford import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 import re
@@ -14,7 +14,9 @@ from flask import jsonify
 import util_age
 
 
-st = StanfordNERTagger(encoding='utf-8')
+st = StanfordNERTagger('/home/akshatz/Documents/stanford-ner-4.0.0/classifiers/english.conll.4class.distsim.crf.ser.gz',
+                       '/home/akshatz/Documents/stanford-ner-4.0.0/stanford-ner.jar',
+                       encoding='utf-8')
 
 
 def nameex(txt):
@@ -66,11 +68,12 @@ def genex(tokenized_text):
 def main_ex(output):
     tokenized_text = word_tokenize(output)
     classified_text = st.tag(tokenized_text)
-    print(classified_text)
-    data = {}
-    data['name'] = nameex(classified_text)
-    data['dob'] = dateex(output)
-    data['age'] = age(data['dob'])
-    data['docType'] = "Aadhar_Card"
-    data["gender"] = genex(tokenized_text)
+    with open("ID.txt", "a") as f:
+        data = {}
+        data['name'] = nameex(classified_text)
+        data['dob'] = dateex(output)
+        data['age'] = age(data['dob'])
+        data['docType'] = "Aadhar_Card"
+        data["gender"] = genex(tokenized_text)
+        f.write(json.dumps(data)+"\n")
     return jsonify(data)
