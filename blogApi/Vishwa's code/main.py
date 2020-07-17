@@ -82,10 +82,8 @@ def rear():
             img = Image.open(filename)
             img.load()
             text = pytesseract.image_to_string(img)
-            f.write(text+"\n")
             if text == None:
                 text = cat(preprocess(filename))
-                f.write(text+"\n")
                 return text 
             else:
                 pass
