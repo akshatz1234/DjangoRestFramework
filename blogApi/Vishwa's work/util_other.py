@@ -14,8 +14,8 @@ from flask import jsonify
 import util_age
 
 
-st = StanfordNERTagger('/home/vishwa/card_idf/temp/resources/english.conll.4class.distsim.crf.ser.gz',
-                       '/home/vishwa/card_idf/temp/resources/stanford-ner.jar',
+st = StanfordNERTagger('/home/akshatz/Documents/stanford-ner-4.0.0/classifiers/english.conll.4class.distsim.crf.ser.gz',
+                       '/home/akshatz/Documents/stanford-ner-4.0.0/stanford-ner.jar',
                        encoding='utf-8')
 
 
@@ -27,6 +27,7 @@ def nameex(txt):
     for tag, chunk in groupby(txt, lambda x:x[1]):
         if tag != "O" and tag == 'PERSON':
             a=" ".join(w for w, t in chunk)
+            print(a)
             return(a)
             break
 
@@ -83,7 +84,7 @@ def doctype(output):
 def main_ex(output):
     tokenized_text = word_tokenize(output)
     classified_text = st.tag(tokenized_text)
-    print(classified_text)
+    # print(classified_text)
     data = {}
     data['name'] = nameex(classified_text)
     data['dob'] = dateex(output)
