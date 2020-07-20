@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jul 16 19:09:37 2020
-
-@author: vishwa
-"""
 
 from nltk.tag.stanford import StanfordNERTagger
 from nltk.tokenize import word_tokenize
@@ -36,24 +29,39 @@ def dateex(output):
     In: Output from the OCR
     out: Date
     """
-    date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
-    if not date:
-        return("None","None")
+    date = re.search("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
+    if date is None:
+        year = re.search("(19..|20..)", output)
+        if year is None:
+            return "None"
+        else:
+            return(year.group(1))
     else:
-        a = []
-        for i in date:
-            a.append(util_age.main(i))
-        f = a.index(max(a))
-        dob = date[f]
-        return(max(a),dob)
+        return(date.group(1))
+        
+
+def age(dob):
+    if dob == "None":
+        return "None"
+    else:
+        return(util_age.main(dob))
+        
+# bloodgroup 
+def bloodGroup(output):
+    blood_group= re.search("^(A|B|AB|O)[+-]$")
+    if bloodGroup is None:
+        return None
+    else: 
+        return (bloodGroup.group(1))
+    
 
 def main_ex(output):
     tokenized_text = word_tokenize(output)
     classified_text = st.tag(tokenized_text)
-#    print(classified_text)
+    print(classified_text)
     data = {}
     data['name'] = nameex(classified_text)
-    data['dob'] = dateex(output)[1]
-    data['age'] = dateex(output)[0]
-    data['docType'] = "Passport"
+    data['dob'] = dateex(output)
+    data['age'] = age(data['dob'])
+    data['docType'] = "PAN_card"
     return jsonify(data)

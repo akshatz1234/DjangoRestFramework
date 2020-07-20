@@ -19,7 +19,6 @@ st = StanfordNERTagger('/home/akshatz/Documents/stanford-ner-4.0.0/classifiers/e
                        encoding='utf-8')
 
 
-
 def nameex(txt):
     """
     In: Classified text from StanfordNER
@@ -28,6 +27,7 @@ def nameex(txt):
     for tag, chunk in groupby(txt, lambda x:x[1]):
         if tag != "O" and tag == 'PERSON':
             a=" ".join(w for w, t in chunk)
+            print(a)
             return(a)
             break
 
@@ -50,10 +50,13 @@ def dateex(output):
 def main_ex(output):
     tokenized_text = word_tokenize(output)
     classified_text = st.tag(tokenized_text)
-#    print(classified_text)
+#    # print(classified_text)
     data = {}
     data['name'] = nameex(classified_text)
     data['dob'] = dateex(output)[1]
     data['age'] = dateex(output)[0]
     data['docType'] = "Passport"
+    data['gender'] = ""
+    data['bloodGroup'] = ""
+    data['address'] = ""    
     return jsonify(data)

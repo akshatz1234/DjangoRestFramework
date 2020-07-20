@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jul 16 19:09:37 2020
+Created on Mon Jul 13 16:43:22 2020
 
 @author: vishwa
 """
@@ -19,7 +19,6 @@ st = StanfordNERTagger('/home/akshatz/Documents/stanford-ner-4.0.0/classifiers/e
                        encoding='utf-8')
 
 
-
 def nameex(txt):
     """
     In: Classified text from StanfordNER
@@ -28,6 +27,7 @@ def nameex(txt):
     for tag, chunk in groupby(txt, lambda x:x[1]):
         if tag != "O" and tag == 'PERSON':
             a=" ".join(w for w, t in chunk)
+            print(a)
             return(a)
             break
 
@@ -36,24 +36,45 @@ def dateex(output):
     In: Output from the OCR
     out: Date
     """
-    date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
-    if not date:
-        return("None","None")
+    date = re.search("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
+    if date is None:
+        year = re.search("(19..|20..)", output)
+        if year is None:
+            return "None"
+        else:
+            return(year.group(1))
     else:
-        a = []
-        for i in date:
-            a.append(util_age.main(i))
-        f = a.index(max(a))
-        dob = date[f]
-        return(max(a),dob)
-
+        return(date.group(1))
+        
+def age(dob):
+    if dob == "None":
+        return "None"
+    else:
+        return(util_age.main(dob))
+        
+def genex(tokenized_text):
+    """
+    In: OCR output Tokenized
+    out: Gender
+    """
+    for i in tokenized_text:
+        male = re.search("(^MA.E$|^Ma.e$)", i)
+        female = re.search("(^FEMA.E$|^Fema.e$)", i)
+        if male is not None:
+            return "Male"
+        if female is not None:
+            return "Female"
+        
+        
 def main_ex(output):
     tokenized_text = word_tokenize(output)
     classified_text = st.tag(tokenized_text)
-#    print(classified_text)
     data = {}
     data['name'] = nameex(classified_text)
-    data['dob'] = dateex(output)[1]
-    data['age'] = dateex(output)[0]
-    data['docType'] = "Passport"
+    data['dob'] = dateex(output)
+    data['age'] = age(data['dob'])
+    data['docType'] = "Aadhar_Card"
+    data['gender'] = genex(tokenized_text)
+    data['bloodGroup'] = ""
+    data['address'] = ""
     return jsonify(data)

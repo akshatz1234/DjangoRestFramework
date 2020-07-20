@@ -10,9 +10,10 @@ from nltk.tag.stanford import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 from itertools import groupby
 
-st = StanfordNERTagger('/home/vishwa/card_idf/temp/resources/english.conll.4class.distsim.crf.ser.gz',
-                       '/home/vishwa/card_idf/temp/resources/stanford-ner.jar',
+st = StanfordNERTagger('/home/akshatz/Documents/stanford-ner-4.0.0/classifiers/english.conll.4class.distsim.crf.ser.gz',
+                       '/home/akshatz/Documents/stanford-ner-4.0.0/stanford-ner.jar',
                        encoding='utf-8')
+
 
 
 def preprocess(path):

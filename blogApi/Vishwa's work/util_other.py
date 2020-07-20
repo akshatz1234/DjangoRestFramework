@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jul 13 16:43:22 2020
+Created on Fri Jul 17 16:03:17 2020
 
 @author: vishwa
 """
-import json
+
 from nltk.tag.stanford import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 import re
@@ -27,6 +27,7 @@ def nameex(txt):
     for tag, chunk in groupby(txt, lambda x:x[1]):
         if tag != "O" and tag == 'PERSON':
             a=" ".join(w for w, t in chunk)
+            print(a)
             return(a)
             break
 
@@ -63,17 +64,33 @@ def genex(tokenized_text):
             return "Male"
         if female is not None:
             return "Female"
-        
+
+def bloodGroup(output):
+    regex = r"\bB\+|\bB-|\bA\+|\bA-|\bAB\+|\bAB-|\bO\+|\bO-"
+    bg = re.search(regex, output)
+    if bg is None:
+        return("None")
+    else:
+        return(bg.group(0))
+
+def doctype(output):
+    emp = re.search("Employee|EMPLOYEE", output)
+    if emp is None:
+        return("None")
+    else:
+        return("Employee_id")
+    
         
 def main_ex(output):
     tokenized_text = word_tokenize(output)
     classified_text = st.tag(tokenized_text)
-    with open("ID.txt", "a") as f:
-        data = {}
-        data['name'] = nameex(classified_text)
-        data['dob'] = dateex(output)
-        data['age'] = age(data['dob'])
-        data['docType'] = "Aadhar_Card"
-        data["gender"] = genex(tokenized_text)
-        f.write(json.dumps(data)+"\n")
+    # print(classified_text)
+    data = {}
+    data['name'] = nameex(classified_text)
+    data['dob'] = dateex(output)
+    data['age'] = age(data['dob'])
+    data['docType'] = doctype(output)
+    data['gender'] = genex(tokenized_text)
+    data['bloodGroup'] = bloodGroup(output)
+    data['address'] = ""
     return jsonify(data)
