@@ -40,35 +40,35 @@ def preprocess(path):
 def cat(out):
     num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)
     if num is None:
-            num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)
+        num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)
+        if num is None:
+            num = re.search("^([A-Z]{1}[0-9]{7})", out)
             if num is None:
-                    num = re.search("^([A-Z]{1}[0-9]{7})", out)
+                num = re.search("ELECTION", out)
+                if num is None:
+                    num = re.search("([A-Z]{2}[0-9]{2} [0-9]{10})", out)
                     if num is None:
-                        num = re.search("ELECTION", out)
-                        if num is None:
-                            num = re.search("([A-Z]{2}[0-9]{2} [0-9]{10})", out)
-                            if num is None:
-                                word = re.search("Permanent",out)
-                                if word is None:
-                                    return(util_other.main_ex(out))
-                                else:
-                                    return(util_pan.main_ex(out))
-                            else:
-                                return(util_dl.main_ex(out))
+                        word = re.search("Permanent",out)
+                        if word is None:
+                            return(util_other.main_ex(out))
                         else:
-                            return(util_vi.main_ex(out))
+                            return(util_pan.main_ex(out))
                     else:
-                        return(util_pass.main_ex(out))
+                        return(util_dl.main_ex(out))
+                else:
+                    return(util_vi.main_ex(out))
             else:
-                return(util_pan.main_ex(out))
+                return(util_pass.main_ex(out))
+        else:
+            return(util_pan.main_ex(out))
     else:
         return(util_aadhar.main_ex(out))
     
 # input file
-filename = "/home/akshatz/Downloads/ID proofs/Aadhar Card/Dinesh_1.JPG"
+filename = "/home/akshatz/Downloads/ID proofs/Aadhar Card/Kushleen.jpg"
 
 # allowed filenames
-ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg',]
+ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 
 # Function to denote allowed file formats
 def allowed_file(filename):
@@ -79,15 +79,14 @@ def allowed_file(filename):
 app = Flask(__name__)
 @app.route("/card", methods=['GET', 'POST'])
 def rear():
-    with open ("ID.txt", "a") as f:
-        if allowed_file(filename):
-            img = Image.open(filename)
-            img.load()
-            text = pytesseract.image_to_string(img)
-            return (cat(preprocess(filename)))
-            if text == None:
-                text = cat(preprocess(filename))
-                return text 
+    if allowed_file(filename):
+        img = Image.open(filename)
+        img.load()
+        text = pytesseract.image_to_string(img)
+        return (cat(preprocess(filename)))
+        if text == None:
+            text = cat(preprocess(filename))
+            return text 
 
 if __name__ == "__main__":
     app.debug = True

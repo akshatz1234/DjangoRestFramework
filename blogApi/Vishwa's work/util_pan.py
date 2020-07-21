@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jul 15 20:47:23 2020
-
-@author: vishwa
-"""
-
 from nltk.tag.stanford import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 import re
@@ -13,12 +5,12 @@ from itertools import groupby
 from flask import jsonify
 import util_age
 
-
+# Stanford NER 
 st = StanfordNERTagger('/home/akshatz/Documents/stanford-ner-4.0.0/classifiers/english.conll.4class.distsim.crf.ser.gz',
                        '/home/akshatz/Documents/stanford-ner-4.0.0/stanford-ner.jar',
                        encoding='utf-8')
 
-
+# name extraction
 def nameex(txt):
     """
     In: Classified text from StanfordNER
