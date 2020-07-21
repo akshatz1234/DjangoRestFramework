@@ -65,17 +65,17 @@ def cat(out):
         return(util_aadhar.main_ex(out))
     
 # input file
-filename = "/home/akshatz/Downloads/ID proofs/Aadhar Card/Kushleen.jpg"
+filename = "/home/akshatz/Downloads/ID proofs/Aadhar Card/Vishwa.jpg"
 
 # allowed filenames
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 
-# Function to denote allowed file formats
+# function to denote allowed file formats
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-# Main Function
+# main Function
 app = Flask(__name__)
 @app.route("/card", methods=['GET', 'POST'])
 def rear():
